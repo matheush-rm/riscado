@@ -86,4 +86,17 @@ describe('parse', () => {
   it('handles CRLF', () => {
     expect(parse('- a ^i1\r\n    n\r\n').todos[0]).toEqual(t('i1', 'a', { notes: 'n' }));
   });
+
+  it('ignores git conflict markers and reports ids it generated', () => {
+    const { todos, added } = parse(
+      ['# L', '<<<<<<< ours', '- a ^aaa', '- b ^bbb', '=======', '- novo', '- ~~a~~ ^aaa', '>>>>>>> theirs', '- c ^ccc'].join('\n'),
+    );
+    expect(todos.map((x) => [x.text, x.done])).toEqual([
+      ['a', true],
+      ['b', false],
+      ['novo', false],
+      ['c', false],
+    ]);
+    expect(added).toEqual([todos[2].id]);
+  });
 });

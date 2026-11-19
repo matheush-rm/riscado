@@ -35,6 +35,14 @@ export async function getCtx(): Promise<Ctx | null> {
 
 export const isDirty = (l: TodoList) => !l.sync?.base || serialize(l.name, l.todos) !== l.sync.base;
 
+/** Items written by hand in the file (no ^id) go to the top, keeping their file order. */
+function toTop(todos: TodoList['todos'], ids: string[]) {
+  if (!ids.length) return todos;
+  const set = new Set(ids);
+  const top = todos.filter((t) => set.has(t.id) && !t.done);
+  return [...top, ...todos.filter((t) => !top.includes(t))];
+}
+
 async function syncOne(ctx: Ctx, listId: string, attempt = 0): Promise<void> {
   const { lists, setTodos, setSync } = useLists.getState();
   const list = lists[listId];
@@ -50,7 +58,8 @@ async function syncOne(ctx: Ctx, listId: string, attempt = 0): Promise<void> {
 
     if (remote && remote.sha !== sha) {
       const baseTodos = base ? parse(base).todos : [];
-      merged = merge(baseTodos, snapshot, parse(remote.content).todos);
+      const theirs = parse(remote.content);
+      merged = toTop(merge(baseTodos, snapshot, theirs.todos), theirs.added);
     }
     const md = serialize(list.name, merged);
     if (!remote || md !== remote.content) {

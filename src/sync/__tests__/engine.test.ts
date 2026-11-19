@@ -84,7 +84,7 @@ it('merges remote edits (Obsidian) with local edits', async () => {
   // app: adds "c" meanwhile
   L().addTodo('c');
   await syncAll();
-  expect(texts()).toEqual(['c', 'b', 'do obsidian', '~a']);
+  expect(texts()).toEqual(['do obsidian', 'c', 'b', '~a']);
   expect(files.get('todos/tarefas.md')!.content.split('\n').filter((l) => l.startsWith('-')).length).toBe(4);
   expect(files.get('todos/tarefas.md')!.content).toMatch(/- do obsidian \^\w+/);
 });
@@ -107,4 +107,44 @@ it('second sync without changes does not write', async () => {
   const sha = files.get('todos/tarefas.md')!.sha;
   await syncAll();
   expect(files.get('todos/tarefas.md')!.sha).toBe(sha);
+});
+
+it('resolves git conflict markers in the remote file: union, hand-written items on top', async () => {
+  L().addTodo('velho');
+  await syncAll();
+  const id = current().todos[0].id;
+  L().addTodo('Alo');
+  await syncAll();
+  const alo = current().todos[0].id;
+  put(
+    'todos/tarefas.md',
+    [
+      '# Tarefas',
+      '',
+      '<<<<<<< Updated upstream',
+      `- Alo ^${alo}`,
+      `- velho ^${id}`,
+      '=======',
+      '- pensar antes de falar',
+      '- nao ter preguiça',
+      `- ~~velho~~ ^${id}`,
+      '>>>>>>> Stashed changes',
+      '',
+    ].join('\n'),
+  );
+  await syncAll();
+  expect(texts()).toEqual(['pensar antes de falar', 'nao ter preguiça', 'Alo', '~velho']);
+  const md = files.get('todos/tarefas.md')!.content;
+  expect(md).not.toMatch(/<<<<<<<|=======|>>>>>>>/);
+  expect(md).toMatch(/- pensar antes de falar \^\w+/);
+});
+
+it('remote removals are synced', async () => {
+  L().addTodo('a');
+  L().addTodo('b');
+  await syncAll();
+  const f = files.get('todos/tarefas.md')!;
+  put('todos/tarefas.md', f.content.replace(/- a \^\w+\n/, ''));
+  await syncAll();
+  expect(texts()).toEqual(['b']);
 });
