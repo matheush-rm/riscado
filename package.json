@@ -46,7 +46,8 @@
     "web": "expo start --web",
     "lint": "expo lint",
     "test": "jest",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "widget:preview": "jest --testMatch \"<rootDir>/scripts/widget-preview.tsx\""
   },
   "private": true,
   "jest": {
