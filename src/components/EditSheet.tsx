@@ -33,65 +33,68 @@ export function EditSheet({ todo, onClose }: { todo: Todo | null; onClose: () =>
 
   return (
     <Modal visible={!!todo} transparent animationType="fade" onRequestClose={save} statusBarTranslucent navigationBarTranslucent>
-      <KeyboardAvoidingView behavior="padding" style={[styles.backdrop, { paddingBottom: 40 + insets.bottom }]}>
+      <View style={[styles.backdrop, { paddingBottom: 40 + insets.bottom }]}>
         <Pressable style={StyleSheet.absoluteFill} onPress={save} />
-        {todo && (
-          <Paper id={todo.id + 'edit'} color={paperFor(todo.id)} style={styles.sheet} contentStyle={styles.body} tape shadow={8}>
-            <TextInput
-              style={styles.text}
-              value={text}
-              onChangeText={(t) => setText(t.replace(/\n/g, ' '))}
-              maxLength={MAX_TEXT}
-              multiline
-              submitBehavior="blurAndSubmit"
-              placeholder="Tarefa"
-              placeholderTextColor="#0006"
-              cursorColor={colors.ink}
-            />
-            <Text style={styles.count}>
-              {text.length}/{MAX_TEXT}
-            </Text>
-            <View style={styles.rule} />
-            <TextInput
-              style={styles.notes}
-              value={notes}
-              onChangeText={setNotes}
-              multiline
-              placeholder="Notas (opcional)"
-              placeholderTextColor="#0006"
-              cursorColor={colors.ink}
-              textAlignVertical="top"
-            />
-            <View style={styles.actions}>
-              <ComicButton
-                label="Apagar"
-                variant="ghost"
-                onPress={() => {
-                  del(todo.id);
-                  onClose();
-                }}
+        <KeyboardAvoidingView behavior="padding" style={styles.avoider} pointerEvents="box-none">
+          {todo && (
+            <Paper id={todo.id + 'edit'} color={paperFor(todo.id)} style={styles.sheet} contentStyle={styles.body} tape shadow={8}>
+              <TextInput
+                style={styles.text}
+                value={text}
+                onChangeText={(t) => setText(t.replace(/\n/g, ' '))}
+                maxLength={MAX_TEXT}
+                multiline
+                submitBehavior="blurAndSubmit"
+                placeholder="Tarefa"
+                placeholderTextColor="#0006"
+                cursorColor={colors.ink}
               />
-              <View style={{ flex: 1 }} />
-              <ComicButton
-                label="Riscar"
-                variant="dark"
-                onPress={() => {
-                  if (text !== todo.text || notes !== todo.notes) update(todo.id, { text, notes });
-                  complete(todo.id);
-                  onClose();
-                }}
+              <Text style={styles.count}>
+                {text.length}/{MAX_TEXT}
+              </Text>
+              <View style={styles.rule} />
+              <TextInput
+                style={styles.notes}
+                value={notes}
+                onChangeText={setNotes}
+                multiline
+                placeholder="Notas (opcional)"
+                placeholderTextColor="#0006"
+                cursorColor={colors.ink}
+                textAlignVertical="top"
               />
-              <ComicButton label="Salvar" onPress={save} />
-            </View>
-          </Paper>
-        )}
-      </KeyboardAvoidingView>
+              <View style={styles.actions}>
+                <ComicButton
+                  label="Apagar"
+                  variant="ghost"
+                  onPress={() => {
+                    del(todo.id);
+                    onClose();
+                  }}
+                />
+                <View style={{ flex: 1 }} />
+                <ComicButton
+                  label="Riscar"
+                  variant="dark"
+                  onPress={() => {
+                    if (text !== todo.text || notes !== todo.notes) update(todo.id, { text, notes });
+                    complete(todo.id);
+                    onClose();
+                  }}
+                />
+                <ComicButton label="Salvar" onPress={save} />
+              </View>
+            </Paper>
+          )}
+        </KeyboardAvoidingView>
+      </View>
     </Modal>
   );
 }
 
 const styles = StyleSheet.create({
-  backdrop: { flex: 1, backgroundColor: '#000a', justifyContent: 'flex-end', padding: 16, paddingBottom: 40 },
+  backdrop: { flex: 1, backgroundColor: '#000a', padding: 16 },
+  avoider: { flex: 1, justifyContent: 'flex-end' },
   sheet: { transform: [{ rotate: '-1deg' }] },
   body: { padding: 18, paddingTop: 22 },
   text: { fontFamily: fonts.handBold, fontSize: 22, lineHeight: 28, color: colors.paperText, padding: 0 },
