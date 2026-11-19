@@ -1,3 +1,4 @@
+import { router, useLocalSearchParams } from 'expo-router';
 import { useCallback, useMemo, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
@@ -26,6 +27,9 @@ export default function TodoScreen() {
   const list = useCurrentList();
   const move = useLists((s) => s.moveTodo);
   const [editing, setEditing] = useState<Todo | null>(null);
+  // riscado://?add=1 (widget "+" button) -> focus the quick add input
+  const { add } = useLocalSearchParams<{ add?: string }>();
+  const clearAdd = useCallback(() => router.setParams({ add: undefined }), []);
   const items = useMemo(() => (list ? pending(list.todos) : []), [list]);
 
   const onReorder = useCallback(({ from, to }: ReorderableListReorderEvent) => move(from, to), [move]);
@@ -48,7 +52,7 @@ export default function TodoScreen() {
           ListEmptyComponent={Empty}
           keyboardShouldPersistTaps="handled"
         />
-        <QuickAdd />
+        <QuickAdd focusRequest={!!add} onFocused={clearAdd} />
       </KeyboardAvoidingView>
       <EditSheet todo={editing} onClose={() => setEditing(null)} />
     </View>

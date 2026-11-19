@@ -1,4 +1,4 @@
-import { ComponentRef, useRef, useState } from 'react';
+import { ComponentRef, useEffect, useRef, useState } from 'react';
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -7,12 +7,25 @@ import { useLists } from '@/store/lists';
 import { Paper } from '@/ui/Paper';
 import { colors, fonts, MAX_CONTENT } from '@/ui/theme';
 
-/** Bottom input. "Enviar" adds and keeps keyboard open for the next one. */
-export function QuickAdd() {
+/**
+ * Bottom input. "Enviar" adds and keeps keyboard open for the next one.
+ * `focusRequest` focuses it (widget "+" deep link), then calls `onFocused`.
+ */
+export function QuickAdd({ focusRequest, onFocused }: { focusRequest?: boolean; onFocused?: () => void }) {
   const [text, setText] = useState('');
   const ref = useRef<ComponentRef<typeof TextInput>>(null);
   const add = useLists((s) => s.addTodo);
   const insets = useSafeAreaInsets();
+
+  useEffect(() => {
+    if (!focusRequest) return;
+    // wait for the screen/keyboard controller to settle after a cold start
+    const t = setTimeout(() => {
+      ref.current?.focus();
+      onFocused?.();
+    }, 350);
+    return () => clearTimeout(t);
+  }, [focusRequest, onFocused]);
 
   const submit = () => {
     if (!text.trim()) return;

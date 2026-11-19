@@ -14,6 +14,7 @@ import { KeyboardProvider } from 'react-native-keyboard-controller';
 import { DrawerMenu } from '@/components/DrawerMenu';
 import { useAutoSync } from '@/sync/useAutoSync';
 import { ImpactLayer } from '@/ui/impact/ImpactLayer';
+import { useWidgetSync } from '@/widget/useWidgetSync';
 import { colors } from '@/ui/theme';
 
 SplashScreen.preventAutoHideAsync();
@@ -27,6 +28,7 @@ const theme = {
 export default function RootLayout() {
   const [loaded] = useFonts({ Bangers_400Regular, Kalam_400Regular, Kalam_700Bold });
   useAutoSync();
+  useWidgetSync();
 
   useEffect(() => {
     if (loaded) SplashScreen.hideAsync();

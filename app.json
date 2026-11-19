@@ -33,7 +33,29 @@
         }
       ],
       "expo-sqlite",
-      "expo-secure-store"
+      "expo-secure-store",
+      [
+        "react-native-android-widget",
+        {
+          "fonts": [
+            "./node_modules/@expo-google-fonts/bangers/400Regular/Bangers_400Regular.ttf",
+            "./node_modules/@expo-google-fonts/kalam/700Bold/Kalam_700Bold.ttf"
+          ],
+          "widgets": [
+            {
+              "name": "Riscado",
+              "label": "Riscado",
+              "description": "Tarefas da lista atual. Aumenta o widget pra ganhar o botão de criar.",
+              "minWidth": "110dp",
+              "minHeight": "50dp",
+              "targetCellWidth": 3,
+              "targetCellHeight": 2,
+              "resizeMode": "horizontal|vertical",
+              "updatePeriodMillis": 0
+            }
+          ]
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,
