@@ -7,8 +7,10 @@ import { useSettings } from '@/store/settings';
 import { syncAll } from './engine';
 
 const DEBOUNCE_MS = 4000;
+/** pull remote changes (ex: Obsidian) while the app stays open */
+const POLL_MS = 30000;
 
-/** Sync on start, on foreground and (debounced) after local edits. */
+/** Sync on start, on foreground, every POLL_MS while active and (debounced) after local edits. */
 export function useAutoSync() {
   useEffect(() => {
     let timer: ReturnType<typeof setTimeout> | undefined;
@@ -20,6 +22,10 @@ export function useAutoSync() {
     };
 
     if (enabled()) syncAll().catch(() => {});
+
+    const poll = setInterval(() => {
+      if (enabled() && AppState.currentState === 'active') syncAll().catch(() => {});
+    }, POLL_MS);
 
     const unsubLists = useLists.subscribe((s, prev) => {
       if (s.lists === prev.lists) return;
@@ -35,6 +41,7 @@ export function useAutoSync() {
     });
     return () => {
       clearTimeout(timer);
+      clearInterval(poll);
       unsubLists();
       sub.remove();
     };
