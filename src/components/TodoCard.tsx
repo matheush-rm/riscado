@@ -42,8 +42,10 @@ function TodoCardBase({ todo, onOpen }: Props) {
   };
 
   const pan = Gesture.Pan()
-    .activeOffsetX([-14, 14])
-    .failOffsetY([-12, 12])
+    // Activate early on horizontal movement and tolerate the vertical drift of a thumb arc;
+    // the old 14/12 thresholds made diagonal swipes fail and the card looked stuck.
+    .activeOffsetX([-8, 8])
+    .failOffsetY([-20, 20])
     .onUpdate((e) => {
       tx.value = e.translationX;
     })
