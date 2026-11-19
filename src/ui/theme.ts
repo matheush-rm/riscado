@@ -21,6 +21,7 @@ export const fonts = {
   comic: 'Bangers_400Regular',
   hand: 'Kalam_400Regular',
   handBold: 'Kalam_700Bold',
+  marker: 'PermanentMarker_400Regular',
 };
 
 /** Deterministic small hash of an id. */

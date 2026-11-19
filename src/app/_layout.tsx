@@ -1,5 +1,6 @@
 import { Bangers_400Regular } from '@expo-google-fonts/bangers';
 import { Kalam_400Regular, Kalam_700Bold } from '@expo-google-fonts/kalam';
+import { PermanentMarker_400Regular } from '@expo-google-fonts/permanent-marker';
 import { DarkTheme, ThemeProvider } from 'expo-router';
 import { Drawer } from 'expo-router/drawer';
 import { useFonts } from 'expo-font';
@@ -26,7 +27,7 @@ const theme = {
 };
 
 export default function RootLayout() {
-  const [loaded] = useFonts({ Bangers_400Regular, Kalam_400Regular, Kalam_700Bold });
+  const [loaded] = useFonts({ Bangers_400Regular, Kalam_400Regular, Kalam_700Bold, PermanentMarker_400Regular });
   useAutoSync();
   useWidgetSync();
 
