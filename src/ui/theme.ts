@@ -35,8 +35,8 @@ export function seed(id: string): number {
 
 export const paperFor = (id: string) => papers[Math.floor(seed(id) * papers.length) % papers.length];
 
-/** tilt in degrees, -1.6..1.6 */
-export const tiltFor = (id: string) => (seed(id + 't') - 0.5) * 3.2;
+/** tilt in degrees, -2..2 */
+export const tiltFor = (id: string) => (seed(id + 't') - 0.5) * 4;
 
 /** pseudo random generator from seed, for stable jitter */
 export function rng(s: number) {

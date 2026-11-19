@@ -18,8 +18,11 @@ export function StrikeText({
   style?: StyleProp<TextStyle>;
   color?: string;
 }) {
-  const [lines, setLines] = useState<Line[]>([]);
+  const [textLines, setLines] = useState<Line[]>([]);
+  const [box, setBox] = useState<Line | null>(null);
   const onTextLayout = (e: TextLayoutEvent) => setLines(e.nativeEvent.lines);
+  // onTextLayout is native only; fall back to one strike over the whole box
+  const lines = textLines.length ? textLines : box ? [box] : [];
 
   const r = rng(seed(id + 's'));
   const paths = lines.map((l) => {
@@ -35,7 +38,14 @@ export function StrikeText({
 
   return (
     <View>
-      <Text style={style} onTextLayout={onTextLayout}>
+      <Text
+        style={style}
+        onTextLayout={onTextLayout}
+        onLayout={(e) => {
+          const { width, height } = e.nativeEvent.layout;
+          setBox({ x: 0, y: 0, width, height });
+        }}
+      >
         {children}
       </Text>
       {lines.length > 0 && (

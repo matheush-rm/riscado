@@ -67,7 +67,7 @@ function TodoCardBase({ todo, onOpen }: Props) {
       transform: [
         { translateX: tx.value },
         { translateY: -Math.abs(p) * 18 },
-        { rotate: `${tilt + p * 14}deg` },
+        { rotate: `${p * 14}deg` },
       ],
     };
   });
@@ -88,7 +88,12 @@ function TodoCardBase({ todo, onOpen }: Props) {
       <Animated.Text style={[styles.hint, hintStyle]}>RISCA!</Animated.Text>
       <GestureDetector gesture={pan}>
         <Animated.View style={cardStyle}>
-          <Pressable onPress={() => onOpen(todo)} onLongPress={drag} delayLongPress={280}>
+          <Pressable
+            onPress={() => onOpen(todo)}
+            onLongPress={drag}
+            delayLongPress={280}
+            style={{ transform: [{ rotate: `${tilt}deg` }] }}
+          >
             <Paper
               id={todo.id}
               color={color}
