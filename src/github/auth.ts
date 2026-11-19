@@ -6,7 +6,7 @@ const KEY = 'github-token';
  * OAuth App client id (device flow enabled). Public by design: device flow
  * needs no client secret. Override with EXPO_PUBLIC_GITHUB_CLIENT_ID.
  */
-const DEFAULT_CLIENT_ID = '';
+const DEFAULT_CLIENT_ID = 'Ov23li9fUTjX3prj1SfC';
 export const CLIENT_ID = process.env.EXPO_PUBLIC_GITHUB_CLIENT_ID || DEFAULT_CLIENT_ID;
 
 export const getToken = () => SecureStore.getItemAsync(KEY);

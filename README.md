@@ -34,19 +34,18 @@ APK em [Releases](../../releases).
 
 No app: menu → **GitHub**.
 
-1. **Conta**: token pessoal *fine-grained* com permissão **Contents: Read and write** só no repo do vault
-   ([criar](https://github.com/settings/personal-access-tokens/new)). Ou "Entrar com GitHub" se o build tiver client id (abaixo).
+1. **Conta**: "Entrar com GitHub" → copia o código, abre github.com/login/device, cola e autoriza.
+   Alternativa: token pessoal *fine-grained* com **Contents: Read and write** só no repo do vault.
 2. **Repositório**: `usuario/repo`, branch (vazio = padrão) e pasta (ex: `todos`).
 3. Pronto. Sincroniza ao abrir, ao voltar pro app e alguns segundos depois de editar.
    `.md` que já existirem na pasta viram listas.
 
 Conflito: merge por item (3-way). Se app e Obsidian mudarem o mesmo campo do mesmo item, o app vence.
 
-### Login com GitHub (device flow), opcional
+### OAuth App
 
-1. [Criar OAuth App](https://github.com/settings/applications/new) (callback URL qualquer, ex: `https://github.com`)
-2. Marcar **Enable Device Flow**
-3. No repo deste projeto: Settings → Variables → Actions → `GH_OAUTH_CLIENT_ID` = client id
+Login usa device flow de um OAuth App (client id em `src/github/auth.ts`, público por design, sem secret).
+Pra usar outro app: `EXPO_PUBLIC_GITHUB_CLIENT_ID=<id>` no build.
 
 ## Release
 
