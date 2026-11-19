@@ -1,11 +1,13 @@
-import { useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { ConfirmDialog } from '@/components/ConfirmDialog';
 import { DoneCard } from '@/components/DoneCard';
 import { Header } from '@/components/Header';
 import { done } from '@/domain/todos';
-import { useCurrentList } from '@/store/lists';
+import { Todo } from '@/domain/types';
+import { useCurrentList, useLists } from '@/store/lists';
 import { Halftone } from '@/ui/Halftone';
 import { colors, fonts } from '@/ui/theme';
 
@@ -13,6 +15,9 @@ export default function DoneScreen() {
   const list = useCurrentList();
   const items = useMemo(() => (list ? done(list.todos) : []), [list]);
   const insets = useSafeAreaInsets();
+  const del = useLists((s) => s.deleteTodo);
+  const [pending, setPending] = useState<Todo | null>(null);
+  const askDelete = useCallback((t: Todo) => setPending(t), []);
 
   return (
     <View style={styles.root}>
@@ -21,7 +26,7 @@ export default function DoneScreen() {
       <FlatList
         data={items}
         keyExtractor={(t) => t.id}
-        renderItem={({ item }) => <DoneCard todo={item} />}
+        renderItem={({ item }) => <DoneCard todo={item} onDelete={askDelete} />}
         contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + 24 }]}
         ListEmptyComponent={
           <View style={styles.empty}>
@@ -32,6 +37,14 @@ export default function DoneScreen() {
         ListFooterComponent={
           items.length ? <Text style={styles.footer}>segura pra apagar de vez · VOLTA devolve pro topo</Text> : undefined
         }
+      />
+      <ConfirmDialog
+        visible={!!pending}
+        title="Apagar de vez?"
+        message={pending?.text}
+        confirmLabel="Apagar"
+        onConfirm={() => pending && del(pending.id)}
+        onClose={() => setPending(null)}
       />
     </View>
   );

@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { scheduleOnRN } from 'react-native-worklets';
 
@@ -16,9 +16,8 @@ const fmt = (ms?: number) => {
   return `${d.getDate()} ${months[d.getMonth()]}`;
 };
 
-function DoneCardBase({ todo }: { todo: Todo }) {
+function DoneCardBase({ todo, onDelete }: { todo: Todo; onDelete: (todo: Todo) => void }) {
   const restore = useLists((s) => s.restoreTodo);
-  const del = useLists((s) => s.deleteTodo);
   const tilt = tiltFor(todo.id);
   const out = useSharedValue(0);
   const h = useSharedValue(0);
@@ -29,11 +28,6 @@ function DoneCardBase({ todo }: { todo: Todo }) {
       if (f) scheduleOnRN(doRestore);
     });
   };
-  const onDelete = () =>
-    Alert.alert('Apagar de vez?', todo.text, [
-      { text: 'Cancelar', style: 'cancel' },
-      { text: 'Apagar', style: 'destructive', onPress: () => del(todo.id) },
-    ]);
 
   const style = useAnimatedStyle(() => ({
     opacity: 1 - out.value,
@@ -49,7 +43,7 @@ function DoneCardBase({ todo }: { todo: Todo }) {
       }}
     >
       <Animated.View style={style}>
-        <Pressable onLongPress={onDelete} delayLongPress={400}>
+        <Pressable onLongPress={() => onDelete(todo)} delayLongPress={400}>
           <Paper id={todo.id} color={colors.donePaper} shadow={4} contentStyle={styles.content}>
             <View style={{ flex: 1 }}>
               <StrikeText id={todo.id} style={styles.text}>

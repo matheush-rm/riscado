@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Modal, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { MAX_TEXT, Todo } from '@/domain/types';
 import { useLists } from '@/store/lists';
@@ -16,6 +17,7 @@ export function EditSheet({ todo, onClose }: { todo: Todo | null; onClose: () =>
   const update = useLists((s) => s.updateTodo);
   const del = useLists((s) => s.deleteTodo);
   const complete = useLists((s) => s.completeTodo);
+  const insets = useSafeAreaInsets();
 
   useEffect(() => {
     if (todo) {
@@ -31,7 +33,7 @@ export function EditSheet({ todo, onClose }: { todo: Todo | null; onClose: () =>
 
   return (
     <Modal visible={!!todo} transparent animationType="fade" onRequestClose={save} statusBarTranslucent navigationBarTranslucent>
-      <KeyboardAvoidingView behavior="padding" style={styles.backdrop}>
+      <KeyboardAvoidingView behavior="padding" style={[styles.backdrop, { paddingBottom: 40 + insets.bottom }]}>
         <Pressable style={StyleSheet.absoluteFill} onPress={save} />
         {todo && (
           <Paper id={todo.id + 'edit'} color={paperFor(todo.id)} style={styles.sheet} contentStyle={styles.body} tape shadow={8}>
