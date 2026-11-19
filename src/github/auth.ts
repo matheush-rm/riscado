@@ -2,8 +2,12 @@ import * as SecureStore from 'expo-secure-store';
 
 const KEY = 'github-token';
 
-/** OAuth App client id (device flow enabled). Override with EXPO_PUBLIC_GITHUB_CLIENT_ID. */
-export const CLIENT_ID = process.env.EXPO_PUBLIC_GITHUB_CLIENT_ID ?? '';
+/**
+ * OAuth App client id (device flow enabled). Public by design: device flow
+ * needs no client secret. Override with EXPO_PUBLIC_GITHUB_CLIENT_ID.
+ */
+const DEFAULT_CLIENT_ID = '';
+export const CLIENT_ID = process.env.EXPO_PUBLIC_GITHUB_CLIENT_ID || DEFAULT_CLIENT_ID;
 
 export const getToken = () => SecureStore.getItemAsync(KEY);
 export const setToken = (t: string) => SecureStore.setItemAsync(KEY, t);

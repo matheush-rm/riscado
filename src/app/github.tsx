@@ -48,6 +48,7 @@ function Account() {
   const setGithub = useSettings((s) => s.setGithub);
   const [code, setCode] = useState<DeviceCode | null>(null);
   const [pat, setPat] = useState('');
+  const [showPat, setShowPat] = useState(!CLIENT_ID);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string>();
   const abort = useRef<AbortController | null>(null);
@@ -134,17 +135,21 @@ function Account() {
         </View>
       ) : (
         <View style={{ gap: 12 }}>
-          {!!CLIENT_ID && <ComicButton label="Entrar com GitHub" onPress={device} disabled={busy} />}
-          <Text style={styles.p}>
-            {CLIENT_ID ? 'ou cola um token pessoal' : 'Cola um token pessoal'} (fine-grained, permissão Contents: read/write no repo):
-          </Text>
-          <Field label="TOKEN" value={pat} onChangeText={setPat} placeholder="github_pat_…" secureTextEntry />
-          <ComicButton label="Salvar token" variant="dark" onPress={savePat} disabled={busy || !pat.trim()} />
-          <ComicButton
-            label="Criar token no GitHub"
-            variant="ghost"
-            onPress={() => Linking.openURL('https://github.com/settings/personal-access-tokens/new')}
-          />
+          {!!CLIENT_ID && <ComicButton label={busy ? 'Abrindo…' : 'Entrar com GitHub'} onPress={device} disabled={busy} />}
+          {showPat ? (
+            <>
+              <Text style={styles.p}>Token pessoal (fine-grained, permissão Contents: read/write no repo):</Text>
+              <Field label="TOKEN" value={pat} onChangeText={setPat} placeholder="github_pat_…" secureTextEntry />
+              <ComicButton label="Salvar token" variant="dark" onPress={savePat} disabled={busy || !pat.trim()} />
+              <ComicButton
+                label="Criar token no GitHub"
+                variant="ghost"
+                onPress={() => Linking.openURL('https://github.com/settings/personal-access-tokens/new')}
+              />
+            </>
+          ) : (
+            <ComicButton label="usar token pessoal" variant="ghost" onPress={() => setShowPat(true)} />
+          )}
         </View>
       )}
       {!!error && <Text style={styles.error}>{error}</Text>}
