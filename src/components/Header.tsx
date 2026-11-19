@@ -44,6 +44,7 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: fonts.comic,
     fontSize: 34,
+    lineHeight: 40,
     letterSpacing: 1.5,
     color: colors.text,
     textShadowColor: colors.accent,
@@ -51,5 +52,5 @@ const styles = StyleSheet.create({
     textShadowRadius: 0,
     transform: [{ rotate: '-1.5deg' }],
   },
-  subtitle: { fontFamily: fonts.hand, fontSize: 14, color: colors.muted, marginTop: -2 },
+  subtitle: { fontFamily: fonts.hand, fontSize: 14, lineHeight: 18, color: colors.muted, marginTop: 4 },
 });

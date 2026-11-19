@@ -1,6 +1,6 @@
 import { ReactNode, useMemo, useState } from 'react';
 import { LayoutChangeEvent, StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
-import Svg, { Polygon, Rect } from 'react-native-svg';
+import Svg, { Defs, LinearGradient, Polygon, Rect, Stop } from 'react-native-svg';
 
 import { colors, rng, seed } from './theme';
 
@@ -53,7 +53,14 @@ export function Paper({ id, color, children, style, contentStyle, tape, shadow =
           pointerEvents="none"
         >
           <Polygon points={points} fill={colors.shadow} transform={`translate(${shadow},${shadow})`} />
+          <Defs>
+            <LinearGradient id={`curl-${id}`} x1="0" y1="0" x2="0.15" y2="1">
+              <Stop offset="0.55" stopColor="#000" stopOpacity={0} />
+              <Stop offset="1" stopColor="#000" stopOpacity={0.13} />
+            </LinearGradient>
+          </Defs>
           <Polygon points={points} fill={color} />
+          <Polygon points={points} fill={`url(#curl-${id})`} />
           {/* faint paper grain */}
           <Rect x={0} y={0} width={size.w} height={size.h * 0.18} fill="#fff" opacity={0.08} />
         </Svg>

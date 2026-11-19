@@ -7,7 +7,7 @@ import { Todo } from '@/domain/types';
 import { useLists } from '@/store/lists';
 import { Paper } from '@/ui/Paper';
 import { StrikeText } from '@/ui/StrikeText';
-import { colors, fonts, tiltFor } from '@/ui/theme';
+import { colors, fonts, MAX_CONTENT, tiltFor } from '@/ui/theme';
 
 const fmt = (ms?: number) => {
   if (!ms) return '';
@@ -76,9 +76,9 @@ function DoneCardBase({ todo }: { todo: Todo }) {
 export const DoneCard = memo(DoneCardBase);
 
 const styles = StyleSheet.create({
-  wrap: { paddingHorizontal: 18, paddingVertical: 6 },
-  content: { flexDirection: 'row', alignItems: 'center', paddingLeft: 16, paddingRight: 10, paddingVertical: 10, gap: 10 },
-  text: { fontFamily: fonts.hand, fontSize: 18, lineHeight: 24, color: colors.doneText, alignSelf: 'flex-start' },
+  wrap: { paddingHorizontal: 18, paddingVertical: 7, width: '100%', maxWidth: MAX_CONTENT, alignSelf: 'center' },
+  content: { flexDirection: 'row', alignItems: 'center', paddingLeft: 20, paddingRight: 12, paddingVertical: 16, minHeight: 76, gap: 10 },
+  text: { fontFamily: fonts.hand, fontSize: 20, lineHeight: 27, color: colors.doneText, alignSelf: 'flex-start' },
   notes: { fontFamily: fonts.hand, fontSize: 13, color: colors.doneText, opacity: 0.6, marginTop: 2 },
   date: { fontFamily: fonts.comic, fontSize: 12, letterSpacing: 1, color: colors.doneText, opacity: 0.55, marginTop: 2 },
   undo: {

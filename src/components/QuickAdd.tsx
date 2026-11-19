@@ -5,7 +5,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MAX_TEXT } from '@/domain/types';
 import { useLists } from '@/store/lists';
 import { Paper } from '@/ui/Paper';
-import { colors, fonts } from '@/ui/theme';
+import { colors, fonts, MAX_CONTENT } from '@/ui/theme';
 
 /** Bottom input. "Enviar" adds and keeps keyboard open for the next one. */
 export function QuickAdd() {
@@ -55,7 +55,7 @@ export function QuickAdd() {
 }
 
 const styles = StyleSheet.create({
-  bar: { paddingHorizontal: 14, paddingTop: 8 },
+  bar: { paddingHorizontal: 14, paddingTop: 8, width: '100%', maxWidth: MAX_CONTENT, alignSelf: 'center' },
   paper: {},
   row: { flexDirection: 'row', alignItems: 'center', paddingLeft: 14, paddingRight: 6, minHeight: 54 },
   input: { flex: 1, fontFamily: fonts.hand, fontSize: 18, color: colors.paperText, paddingVertical: 10 },

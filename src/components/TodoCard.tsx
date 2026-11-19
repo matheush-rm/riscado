@@ -16,7 +16,7 @@ import { Todo } from '@/domain/types';
 import { useLists } from '@/store/lists';
 import { useImpacts } from '@/ui/impact/store';
 import { Paper } from '@/ui/Paper';
-import { colors, fonts, paperFor, tiltFor } from '@/ui/theme';
+import { colors, fonts, MAX_CONTENT, paperFor, tiltFor } from '@/ui/theme';
 
 type Props = { todo: Todo; onOpen: (t: Todo) => void };
 
@@ -121,7 +121,7 @@ function TodoCardBase({ todo, onOpen }: Props) {
 export const TodoCard = memo(TodoCardBase);
 
 const styles = StyleSheet.create({
-  wrap: { paddingHorizontal: 18, paddingVertical: 7, overflow: 'visible' },
+  wrap: { paddingHorizontal: 18, paddingVertical: 9, overflow: 'visible', width: '100%', maxWidth: MAX_CONTENT, alignSelf: 'center' },
   hint: {
     position: 'absolute',
     alignSelf: 'center',
@@ -131,9 +131,9 @@ const styles = StyleSheet.create({
     letterSpacing: 2,
     color: colors.accent,
   },
-  content: { paddingHorizontal: 16, paddingVertical: 12, minHeight: 54, justifyContent: 'center' },
-  text: { fontFamily: fonts.hand, fontSize: 19, lineHeight: 25, color: colors.paperText },
+  content: { paddingHorizontal: 20, paddingTop: 20, paddingBottom: 22, minHeight: 84, justifyContent: 'center' },
+  text: { fontFamily: fonts.hand, fontSize: 21, lineHeight: 28, color: colors.paperText },
   notesRow: { flexDirection: 'row', alignItems: 'center', marginTop: 4, gap: 6 },
   notesMark: { width: 10, height: 2, backgroundColor: colors.paperText, opacity: 0.5 },
-  notes: { flex: 1, fontFamily: fonts.hand, fontSize: 14, color: colors.paperText, opacity: 0.7 },
+  notes: { flex: 1, fontFamily: fonts.hand, fontSize: 15, color: colors.paperText, opacity: 0.7 },
 });

@@ -48,3 +48,6 @@ export function rng(s: number) {
     return ((x >>> 0) % 10000) / 10000;
   };
 }
+
+/** Max width of list column, keeps post-its post-it shaped on wide screens. */
+export const MAX_CONTENT = 540;
