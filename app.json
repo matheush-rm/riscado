@@ -9,7 +9,7 @@
     "userInterfaceStyle": "dark",
     "backgroundColor": "#15131A",
     "android": {
-      "package": "io.github.mathhrm.riscado",
+      "package": "io.github.matheushrm.riscado",
       "adaptiveIcon": {
         "backgroundColor": "#15131A",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
